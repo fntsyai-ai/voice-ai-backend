@@ -1,0 +1,272 @@
+.app {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.container {
+  background: white;
+  border-radius: 20px;
+  padding: 3rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 3rem;
+  position: relative;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  color: #666;
+  font-size: 1.1rem;
+}
+
+.connection-status {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.connection-status.connected {
+  background: #d4f4dd;
+  color: #2d6a3e;
+}
+
+.connection-status.disconnected {
+  background: #ffd4d4;
+  color: #6a2d2d;
+}
+
+.call-container {
+  text-align: center;
+  padding: 3rem 0;
+}
+
+.call-button-wrapper {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 2rem;
+}
+
+.call-button {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  border: none;
+  font-size: 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.call-button .icon {
+  width: 48px;
+  height: 48px;
+}
+
+.call-button.start {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.call-button.start:hover:not(:disabled) {
+  transform: scale(1.05);
+  box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+}
+
+.call-button.start:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.call-button.end {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+  animation: pulse 2s infinite;
+}
+
+.call-button.end:hover {
+  transform: scale(1.05);
+  box-shadow: 0 15px 40px rgba(245, 87, 108, 0.4);
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 10px 30px rgba(245, 87, 108, 0.3);
+  }
+  50% {
+    box-shadow: 0 10px 40px rgba(245, 87, 108, 0.5);
+  }
+}
+
+.speaking-indicator {
+  position: absolute;
+  bottom: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+  height: 30px;
+}
+
+.speaking-wave {
+  width: 6px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 3px;
+  animation: wave 1s ease-in-out infinite;
+}
+
+.speaking-wave:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.speaking-wave:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.speaking-wave:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes wave {
+  0%, 100% {
+    height: 10px;
+  }
+  50% {
+    height: 30px;
+  }
+}
+
+.status {
+  font-size: 1.1rem;
+  color: #666;
+  min-height: 30px;
+}
+
+.transcript {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 2px solid #f0f0f0;
+}
+
+.transcript-title {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+.transcript-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 1rem;
+}
+
+.message {
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  line-height: 1.6;
+  max-width: 80%;
+}
+
+.message.user {
+  background: #f0f0f0;
+  align-self: flex-start;
+  margin-right: auto;
+}
+
+.message.ai {
+  background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+  border: 2px solid #667eea30;
+  align-self: flex-end;
+  margin-left: auto;
+}
+
+.message-label {
+  font-weight: 600;
+  margin-right: 0.5rem;
+  color: #667eea;
+}
+
+.message.user .message-label {
+  color: #666;
+}
+
+.message-text {
+  color: #333;
+}
+
+/* Scrollbar styling */
+.transcript-messages::-webkit-scrollbar {
+  width: 8px;
+}
+
+.transcript-messages::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 4px;
+}
+
+.transcript-messages::-webkit-scrollbar-thumb {
+  background: #667eea;
+  border-radius: 4px;
+}
+
+.transcript-messages::-webkit-scrollbar-thumb:hover {
+  background: #764ba2;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .container {
+    padding: 2rem 1.5rem;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .call-button {
+    width: 150px;
+    height: 150px;
+    font-size: 1rem;
+  }
+
+  .call-button .icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .connection-status {
+    position: static;
+    display: inline-block;
+    margin-top: 1rem;
+  }
+
+  .message {
+    max-width: 90%;
+  }
+}

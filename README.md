@@ -1,23 +1,23 @@
-# Voice AI Backend
+# Voice AI Frontend
 
-Real-time voice AI server with WebSocket support. Handles speech-to-text, LLM processing, and text-to-speech.
+Real-time voice conversation interface with AI agents. Built with React and Vite.
 
 ## Features
 
-- WebSocket server for real-time communication
-- Multi-session support (concurrent calls)
-- Speech-to-text with Deepgram
-- LLM integration (OpenAI GPT or Google Gemini)
-- Text-to-speech with ElevenLabs
-- Full conversation context management
+- Real-time voice conversation with AI
+- WebSocket connection to backend
+- Clean, modern UI with gradient design
+- Live conversation transcript
+- Speaking indicator animation
+- Responsive design
 
 ## Tech Stack
 
-- Node.js + Express
-- Socket.io (WebSocket)
-- Deepgram SDK (Speech-to-Text)
-- OpenAI API / Google Gemini (LLM)
-- ElevenLabs SDK (Text-to-Speech)
+- React 18
+- Vite
+- Socket.io Client
+- Web Audio API
+- MediaRecorder API
 
 ## Setup
 
@@ -27,15 +27,7 @@ Real-time voice AI server with WebSocket support. Handles speech-to-text, LLM pr
 npm install
 ```
 
-### 2. Get API Keys
-
-You'll need API keys from:
-
-- **Deepgram**: https://deepgram.com
-- **OpenAI**: https://platform.openai.com (or Google AI for Gemini)
-- **ElevenLabs**: https://elevenlabs.io
-
-### 3. Configure Environment
+### 2. Configure Environment
 
 Copy `.env.example` to `.env`:
 
@@ -43,181 +35,114 @@ Copy `.env.example` to `.env`:
 cp .env.example .env
 ```
 
-Update `.env` with your API keys:
+Update `.env` with your backend URL:
 
 ```env
-PORT=3001
-
-# Add your actual API keys
-DEEPGRAM_API_KEY=your_actual_key_here
-OPENAI_API_KEY=your_actual_key_here
-ELEVENLABS_API_KEY=your_actual_key_here
-
-# Choose LLM provider
-LLM_PROVIDER=openai
-OPENAI_MODEL=gpt-4o-mini
-
-# Or use Gemini
-# LLM_PROVIDER=gemini
-# GOOGLE_API_KEY=your_actual_key_here
-# GEMINI_MODEL=gemini-2.0-flash-exp
+VITE_SERVER_URL=http://localhost:3001
 ```
 
-### 4. Run Development Server
+For production, use your Railway backend URL:
+
+```env
+VITE_SERVER_URL=https://your-backend.railway.app
+```
+
+### 3. Run Development Server
 
 ```bash
 npm run dev
 ```
 
-Server will start on http://localhost:3001
+Visit http://localhost:5173
 
-### 5. Run Production Server
+### 4. Build for Production
 
 ```bash
-npm start
+npm run build
 ```
 
-## Deployment (Railway)
+## Deployment (Netlify)
 
 ### Option 1: Deploy via GitHub
 
 1. Push this repo to GitHub
-2. Go to [Railway](https://railway.app)
-3. Create new project → "Deploy from GitHub repo"
-4. Choose your repository
-5. Railway auto-detects Node.js
-6. Add environment variables (all API keys)
+2. Go to [Netlify](https://netlify.com)
+3. Click "Add new site" → "Import an existing project"
+4. Choose your GitHub repo
+5. Configure build settings:
+   - Build command: `npm run build`
+   - Publish directory: `dist`
+6. Add environment variable:
+   - `VITE_SERVER_URL`: Your Railway backend URL
 7. Deploy!
 
-### Option 2: Deploy via Railway CLI
+### Option 2: Deploy via Netlify CLI
 
 ```bash
-# Install Railway CLI
-npm install -g @railway/cli
+# Install Netlify CLI
+npm install -g netlify-cli
 
-# Login
-railway login
+# Build the project
+npm run build
 
-# Initialize and deploy
-railway init
-railway up
+# Deploy
+netlify deploy --prod
 ```
 
 ## Environment Variables
 
-| Variable | Description | Required | Example |
-|----------|-------------|----------|---------|
-| `PORT` | Server port | No (default: 3001) | `3001` |
-| `DEEPGRAM_API_KEY` | Deepgram API key | Yes | `abc123...` |
-| `OPENAI_API_KEY` | OpenAI API key | If using OpenAI | `sk-...` |
-| `GOOGLE_API_KEY` | Google AI API key | If using Gemini | `AIza...` |
-| `ELEVENLABS_API_KEY` | ElevenLabs API key | Yes | `xyz789...` |
-| `LLM_PROVIDER` | LLM to use (`openai` or `gemini`) | No (default: openai) | `openai` |
-| `OPENAI_MODEL` | OpenAI model name | No (default: gpt-4o-mini) | `gpt-4o-mini` |
-| `GEMINI_MODEL` | Gemini model name | No (default: gemini-2.0-flash-exp) | `gemini-2.0-flash-exp` |
-| `ELEVENLABS_VOICE_ID` | ElevenLabs voice ID | No (default: Rachel) | `21m00Tcm4TlvDq8ikWAM` |
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `VITE_SERVER_URL` | Backend WebSocket server URL | `http://localhost:3001` |
 
 ## Project Structure
 
 ```
-voice-ai-backend/
-├── services/
-│   ├── deepgram.js        # Speech-to-text service
-│   ├── llm.js             # LLM service (OpenAI/Gemini)
-│   └── elevenlabs.js      # Text-to-speech service
-├── server.js              # Main server + WebSocket handlers
-├── package.json           # Dependencies
-├── railway.json           # Railway deployment config
-├── nixpacks.toml          # Nixpacks build config
-├── .env                   # Environment variables (create from .env.example)
-└── README.md              # This file
+voice-ai-frontend/
+├── src/
+│   ├── App.jsx           # Main application component
+│   ├── App.css           # Application styles
+│   ├── main.jsx          # Entry point
+│   └── index.css         # Global styles
+├── index.html            # HTML template
+├── vite.config.js        # Vite configuration
+├── netlify.toml          # Netlify deployment config
+├── package.json          # Dependencies
+└── .env                  # Environment variables (create from .env.example)
 ```
-
-## API Endpoints
-
-### HTTP Endpoints
-
-- `GET /health` - Health check endpoint
-
-### WebSocket Events
-
-**Client → Server:**
-- `call-start` - Start a new call session
-- `audio-stream` - Stream audio data
-- `call-end` - End the call session
-
-**Server → Client:**
-- `connect` - WebSocket connection established
-- `disconnect` - WebSocket connection closed
-- `status` - Status message update
-- `transcript` - Transcribed user speech
-- `ai-response` - AI text response
-- `audio-response` - AI audio response (base64)
-- `error` - Error message
 
 ## How It Works
 
-1. Client connects via WebSocket
-2. Client emits `call-start`
-3. Server initializes Deepgram, LLM, and ElevenLabs services
-4. Client streams audio via `audio-stream` events
-5. Deepgram transcribes audio to text
-6. LLM generates response
-7. ElevenLabs converts response to speech
-8. Server streams audio back to client
-9. Process repeats for conversation
+1. User clicks "Start Call" button
+2. Browser requests microphone permission
+3. Audio is captured and streamed to backend via WebSocket
+4. Backend processes audio (STT → LLM → TTS)
+5. AI audio response streams back to frontend
+6. Audio plays through user's speakers
+7. Conversation transcript updates in real-time
 
-## Switching Between OpenAI and Gemini
+## Browser Requirements
 
-In your `.env` file:
-
-**For OpenAI (GPT-4o-mini):**
-```env
-LLM_PROVIDER=openai
-OPENAI_API_KEY=your_key
-OPENAI_MODEL=gpt-4o-mini
-```
-
-**For Google Gemini:**
-```env
-LLM_PROVIDER=gemini
-GOOGLE_API_KEY=your_key
-GEMINI_MODEL=gemini-2.0-flash-exp
-```
+- Modern browser with WebSocket support
+- Microphone access
+- HTTPS (required for mic access in production)
 
 ## Troubleshooting
 
-### "DEEPGRAM_API_KEY is not set"
-- Make sure `.env` file exists
-- Verify API key is properly set
+### "Could not access microphone"
+- Check browser permissions
+- Ensure HTTPS in production
+- Try different browser
 
-### "Connection refused"
-- Check if server is running
-- Verify PORT is not in use
-- Check firewall settings
+### "Connection failed"
+- Verify backend URL in `.env`
+- Check if backend is running
+- Look for CORS issues in console
 
-### "Failed to connect to Deepgram"
-- Verify Deepgram API key
-- Check internet connection
-- Ensure you have credits
-
-### "LLM error"
-- Verify OpenAI/Google API key
-- Check rate limits
-- Ensure model name is correct
-
-### "ElevenLabs error"
-- Verify ElevenLabs API key
-- Check character quota
-- Ensure voice ID is valid
-
-## Cost Estimates
-
-**Per minute of conversation:**
-- Deepgram: ~$0.0043/min
-- OpenAI (GPT-4o-mini): ~$0.002/min
-- ElevenLabs: ~$0.018/min
-- **Total: ~$0.024/min** ($1.44/hour)
+### "No audio playing"
+- Check speaker/volume settings
+- Look for errors in browser console
+- Verify audio format compatibility
 
 ## License
 
