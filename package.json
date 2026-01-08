@@ -11,7 +11,7 @@
     "@google/generative-ai": "^0.21.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
-    "elevenlabs": "^0.15.3",
+    "elevenlabs": "^0.8.1",
     "express": "^4.21.2",
     "openai": "^4.76.1",
     "socket.io": "^4.7.4"
