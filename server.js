@@ -11,17 +11,22 @@ dotenv.config()
 
 const app = express()
 const httpServer = createServer(app)
+
+// Configure CORS for Socket.io and Express
+const corsOptions = {
+  origin: ['https://voicecallai.netlify.app', 'http://localhost:5173', 'http://localhost:3000'],
+  methods: ['GET', 'POST'],
+  credentials: true
+}
+
 const io = new Server(httpServer, {
-  cors: {
-    origin: '*',
-    methods: ['GET', 'POST']
-  }
+  cors: corsOptions
 })
 
 const PORT = process.env.PORT || 3001
 
 // Middleware
-app.use(cors())
+app.use(cors(corsOptions))
 app.use(express.json())
 
 // Health check
@@ -37,16 +42,22 @@ io.on('connection', (socket) => {
   console.log(`Client connected: ${socket.id}`)
 
   // Initialize services for this session
-  const session = {
-    id: socket.id,
-    conversationHistory: [],
-    deepgram: null,
-    llm: new LLMService(),
-    elevenlabs: new ElevenLabsService(),
-    isCallActive: false
+  let session
+  try {
+    session = {
+      id: socket.id,
+      conversationHistory: [],
+      deepgram: null,
+      llm: new LLMService(),
+      elevenlabs: new ElevenLabsService(),
+      isCallActive: false
+    }
+    activeSessions.set(socket.id, session)
+  } catch (error) {
+    console.error(`Error initializing session [${socket.id}]:`, error)
+    socket.emit('error', { message: 'Server configuration error. Please contact administrator.' })
+    return
   }
-
-  activeSessions.set(socket.id, session)
 
   // Handle call start
   socket.on('call-start', async () => {
